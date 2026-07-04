@@ -34,18 +34,24 @@ class _EventScreenState extends State<EventScreen> {
     };
 
     ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Text('Event saved: ${eventData['name']}'),
-      ),
+      SnackBar(content: Text('Event saved: ${eventData['name']}')),
     );
+  }
+
+  void _joinEvent() {
+    final eventName = _eventNameController.text.trim().isEmpty
+        ? 'this event'
+        : _eventNameController.text.trim();
+
+    ScaffoldMessenger.of(
+      context,
+    ).showSnackBar(SnackBar(content: Text('You joined $eventName')));
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Event Details'),
-      ),
+      appBar: AppBar(title: const Text('Event Details')),
       body: SafeArea(
         child: SingleChildScrollView(
           padding: const EdgeInsets.all(16),
@@ -54,9 +60,66 @@ class _EventScreenState extends State<EventScreen> {
             children: [
               const Text(
                 'Create Event',
-                style: TextStyle(
-                  fontSize: 24,
-                  fontWeight: FontWeight.bold,
+                style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+              ),
+              const SizedBox(height: 16),
+              Card(
+                elevation: 2,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(16),
+                ),
+                child: Padding(
+                  padding: const EdgeInsets.all(16),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Row(
+                        children: const [
+                          Icon(Icons.event_available, color: Colors.blue),
+                          SizedBox(width: 8),
+                          Expanded(
+                            child: Text(
+                              'Join this event',
+                              style: TextStyle(
+                                fontSize: 16,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                      const SizedBox(height: 8),
+                      const Text(
+                        'Tambahkan aksi cepat untuk peserta agar event terasa lebih lengkap.',
+                      ),
+                      const SizedBox(height: 12),
+                      Row(
+                        children: [
+                          Expanded(
+                            child: ElevatedButton.icon(
+                              onPressed: _joinEvent,
+                              icon: const Icon(Icons.group_add),
+                              label: const Text('Join Now'),
+                            ),
+                          ),
+                          const SizedBox(width: 12),
+                          Expanded(
+                            child: OutlinedButton.icon(
+                              onPressed: () {
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  const SnackBar(
+                                    content: Text('Event shared successfully'),
+                                  ),
+                                );
+                              },
+                              icon: const Icon(Icons.share),
+                              label: const Text('Share'),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
                 ),
               ),
               const SizedBox(height: 16),
